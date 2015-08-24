@@ -465,7 +465,8 @@ class FPPDF_Entry {
         if (is_array($value)){
             $new_value = '';
             foreach($value as $val){
-                if (is_array($val))
+				//added a check to make sure the file array isn't converted to string *sicksidex*
+                if (is_array($val) && $field->type != 'file')
                     $new_value .= implode(', ', $val) . "\n";
             }
             if ($new_value != '')
@@ -476,7 +477,9 @@ class FPPDF_Entry {
     }
 	
    public static function get_file_name($media_ids, $short = true){
-        $value = '';
+        $value = array();
+		$i = 0
+		
         foreach((array)$media_ids as $media_id){
             if ( is_numeric($media_id) ) {
                 $attachment = get_post($media_id);
@@ -486,11 +489,14 @@ class FPPDF_Entry {
                 $url = wp_get_attachment_url($media_id);               
 				$label = ($short) ? basename($attachment->guid) : $url;
 
-				$value = array(
+				//Added second dimension to the array to hold multiple files *sicksidex*
+				$temp = array(
 					'name' => $label,
 					'url' => $url, 
 					'path' => str_replace(site_url() .'/', ABSPATH, $url),
 				);
+				$value[$i] = $temp;
+				$i++;
         	}
 	    }		
 	    return $value;
