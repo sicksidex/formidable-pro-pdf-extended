@@ -478,7 +478,7 @@ class FPPDF_Entry {
 	
    public static function get_file_name($media_ids, $short = true){
         $value = array();
-		$i = 0
+		$i = 0;
 		
         foreach((array)$media_ids as $media_id){
             if ( is_numeric($media_id) ) {
